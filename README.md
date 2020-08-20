@@ -7,14 +7,17 @@ base url: https://anywhere-fitness-1.herokuapp.com/api
 Clients
   
   -GET
+  
     /clients
     returns an array of all registered clients 
     
   -GET
+  
     /clients/:id
     returns a single client object
     
   -POST
+  
     /clients/register
     the request body must have "username" and "password" keys; "name" and "about" keys are optional, but not required  
     /clients/login 
@@ -25,14 +28,17 @@ Clients
 Instructors
   
   -GET
+  
     /instructors
     returns an array of all registered instructors 
     
   -GET
+  
     /clients/:id
     returns a single instructor object
     
   -POST 
+  
     /instructors/register
     the request body must have "username" and "password" keys; "name" and "specialties" keys are optional, but not required
     /instructors/login
@@ -42,10 +48,12 @@ Instructors
  Classes
   
   -GET
+  
     /classes
     returns an array of classes 
     
   -GET
+  
     /classes/:id
     returns a single class
     
