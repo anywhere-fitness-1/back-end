@@ -1,10 +1,7 @@
 const express = require("express");
-const helmet = require("helmet");
 const cors = require("cors");
-
+const helmet = require("helmet");
 const server = express();
-
-// import routers ************
 const authenticate = require("../auth/restricted-middleware.js");
 
 const clientRouter = require("../api/clients/client-router.js");
