@@ -1,27 +1,27 @@
-const express = require("express")
-const helmet = require("helmet")
-const cors = require("cors")
+const express = require("express");
+const cors = require("cors");
+const helmet = require("helmet");
 
-const server = express()
+const authenticate = require("../auth/restricted-middleware.js");
 
-// import routers ************
+const clientRouter = require("../api/clients/client-router.js");
+const instructorRouter = require("../api/instructors/instructor-router.js");
+const classRouter = require("../api/classes/class-router.js");
+const server = express();
 
+server.use(helmet());
+server.use(cors());
+server.use(express.json());
 
-
-// import routers ************
-
-server.use(helmet())
-server.use(cors())
-server.use(express.json())
-
-// routers *******************
-
-
-
-// routers *******************
+server.use("/api/clients", clientRouter);
+server.use("/api/instructors", instructorRouter);
+// add authenticate below
+server.use("/api/classes", classRouter);
 
 server.get("/", (req, res) => {
-    res.status(200).json({ message: "Welcome to the Anywhere Fitness API!" });
+  res.send({
+    message: "Server up and/or running",
+  });
 });
 
 module.exports = server;
