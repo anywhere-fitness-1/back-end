@@ -5,6 +5,7 @@ For now there is no authentication required.
 base url: https://anywhere-fitness-1.herokuapp.com/api
 
 Clients
+  
   -GET
     /clients
     returns an array of all registered clients 
@@ -22,6 +23,7 @@ Clients
   
 
 Instructors
+  
   -GET
     /instructors
     returns an array of all registered instructors 
@@ -38,6 +40,7 @@ Instructors
     
   
  Classes
+  
   -GET
     /classes
     returns an array of classes 
