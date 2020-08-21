@@ -19,9 +19,21 @@ Clients
   -POST
   
     /clients/register
-    the request body must have "username" and "password" keys; "name" and "about" keys are optional, but not required  
+    the request body must have "username" and "password" keys; "name" and "about" keys are optional, but not required
+    example: 
+    {
+    username: kmalone,
+    password: keleven,
+    name: kevin,
+    about: I want to lose weight
+    }
+    
     /clients/login 
     the request body takes a username and a password property
+    {
+    username: kmalone,
+    password: keleven
+    }
     
   
 
