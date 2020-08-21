@@ -53,8 +53,19 @@ Instructors
   
     /instructors/register
     the request body must have "username" and "password" keys; "name" and "specialties" keys are optional, but not required
+    example:
+    {
+    username: dbrent,
+    password: theoriginal,
+    name: david,
+    specialties: creating hit shows
+    }
     /instructors/login
     the request body takes a username and a password property
+    {
+    username: dbrent,
+    password: theoriginal
+    }
     
   
  Classes
