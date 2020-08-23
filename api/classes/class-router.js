@@ -29,5 +29,16 @@ router.get("/:id", (req, res) => {
       res.status(500).json({ message: "Don't be an idiot" });
     });
 });
-
+router.post("/admin-create-class", (req, res) => {
+  const classData = req.body;
+  classes
+    .addClass(classData)
+    .then((addedClass) => {
+      res.status(201).json(addedClass);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json({ message: error.message });
+    });
+});
 module.exports = router;

@@ -132,8 +132,8 @@ router.post("/login", (req, res) => {
 // add authenticate below
 router.post("/create-class", (req, res) => {
   const classData = req.body;
-  classes
-    .addClass(classData)
+  instructors
+    .addInstClass(classData)
     .then((addedClass) => {
       res.status(201).json(addedClass);
     })
@@ -142,7 +142,7 @@ router.post("/create-class", (req, res) => {
       res.status(500).json({ message: error.message });
     });
 });
-router.get("/classes/:id", (req, res) => {
+router.get("/:id/classes", (req, res) => {
   const { id } = req.params;
   classes
     .findById(id)

@@ -7,6 +7,9 @@ module.exports = {
   findBy,
   update,
   remove,
+  findClientClasses,
+  addClientClass,
+  addInstClass,
 };
 
 function find() {
@@ -54,4 +57,29 @@ function update(changes, id) {
 
 function remove(id) {
   return db("classes").where({ id }).del();
+}
+
+function findClientClasses(id, classID) {
+  return db("clients")
+    .join("client_classes", "client_classes.client_id", "clients.id")
+    .join("classes", "client_classes.class_id", "classes.id")
+    .select("client_id", "class_id", "clients.name")
+    .where("client_classes.client_id", id);
+}
+
+function addClientClass(id, classId) {
+  return db("client_classes").insert({ client_id: id, class_id: classId });
+}
+
+// function addClientClass(id, classId) {
+//   return db("client_classes")
+//     .join("clients", "clients.id", "client_classes.clientid")
+//     .join("classes", "client_classes.class_id", "classes.id")
+//     .insert({ client_id: id, class_id: classId });
+// }
+function addInstClass(classData, id) {
+  return db("classes")
+    .join("classes", "class_id", "instructor_id")
+    .insert(classData)
+    .where({ class_id: id });
 }

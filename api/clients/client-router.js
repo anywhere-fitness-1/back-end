@@ -2,12 +2,15 @@ const router = require("express").Router();
 
 const clients = require("../clients/client-model.js");
 const restricted = require("../../auth/restricted-middleware.js");
+const classes = require("../classes/class-model.js");
+const clientClasses = require("../classes/class-model.js");
 
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const secrets = require("../../data/secrets.js");
 const { isValid } = require("../../auth/auth-user.js");
-
+const { findClientClasses } = require("../classes/class-model.js");
+const { reserveClass } = require("../clients/client-model.js");
 // add "restricted" parameter to routes where needed
 // router.get("/", restricted, (req, res) => {
 
@@ -125,6 +128,48 @@ router.post("/login", (req, res) => {
         "please provide username and password and the password shoud be alphanumeric",
     });
   }
+});
+// getting/adding classes to client profile
+
+router.post("/:id/classes/add-client-class/:classId", (req, res) => {
+  const { id } = req.params;
+  const { classId } = req.params;
+  clientClasses;
+  findClientClasses(id, classData)
+    .then((classData) => {
+      if (classData) {
+        clientClasses.addClientClass(classData, id).then((addedClass) => {
+          res.status(201).json(addedClass);
+        });
+      } else {
+        res.status(404).json({ message: "no such client" });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: "Failed to add class" });
+    });
+});
+
+router.get("/:id/classes/add-client-class/:classId", (req, res) => {
+  addClientClass(req, res);
+});
+
+router.get("/:id/classes", (req, res) => {
+  const { id } = req.params;
+  classes
+    .findClientClasses(id)
+    .then((classData) => {
+      if (classData) {
+        res.json(classData);
+      } else {
+        res.status(404).json({ message: "Not classy" });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: "Don't be an idiot" });
+    });
 });
 
 function generateToken(client) {
