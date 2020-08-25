@@ -7,8 +7,9 @@ const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const secrets = require("../../data/secrets.js");
 const { isValid } = require("../../auth/auth-user.js");
+
 // add "restricted" parameter to routes where needed
-const authenticate = require("../../auth/restricted-middleware.js");
+
 // router.get("/", restricted, (req, res) => {
 
 // instructor adding
@@ -129,8 +130,8 @@ router.post("/login", (req, res) => {
 });
 
 // class editing by an instructor
-// add authenticate below
-router.post("/create-class", (req, res) => {
+// add restricted below
+router.post("/create-class", restricted, (req, res) => {
   const classData = req.body;
   instructors
     .addInstClass(classData)
@@ -158,7 +159,7 @@ router.get("/:id/classes", (req, res) => {
       res.status(500).json({ message: "Don't be an idiot" });
     });
 });
-router.put("/classes/:id", authenticate, (req, res) => {
+router.put("/classes/:id", restricted, (req, res) => {
   const { id } = req.params;
   const changes = req.body;
 

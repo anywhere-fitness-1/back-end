@@ -9,13 +9,12 @@ const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const secrets = require("../../data/secrets.js");
 const { isValid } = require("../../auth/auth-user.js");
-const { findClientClasses } = require("../classes/class-model.js");
-const { reserveClass } = require("../clients/client-model.js");
+
 // add "restricted" parameter to routes where needed
 // router.get("/", restricted, (req, res) => {
 
 // adding/editing/validating clients
-router.get("/", (req, res) => {
+router.get("/", restricted, (req, res) => {
   clients
     .find()
     .then((clients) => {
@@ -26,7 +25,7 @@ router.get("/", (req, res) => {
       res.send(err);
     });
 });
-router.get("/:id", (req, res) => {
+router.get("/:id", restricted, (req, res) => {
   const { id } = req.params;
   clients
     .findById(id)
@@ -43,7 +42,7 @@ router.get("/:id", (req, res) => {
     });
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", restricted, (req, res) => {
   const { id } = req.params;
   const changes = req.body;
   clients
@@ -97,8 +96,7 @@ router.post("/register", (req, res) => {
   } else {
     console.log(error);
     res.status(400).json({
-      message:
-        "please provide username and password and the password shoud be alphanumeric",
+      message: "please provide username and password",
     });
   }
 });
@@ -124,38 +122,33 @@ router.post("/login", (req, res) => {
       });
   } else {
     res.status(400).json({
-      message:
-        "please provide username and password and the password shoud be alphanumeric",
+      message: "please provide username and password",
     });
   }
 });
 // getting/adding classes to client profile
 
-router.post("/:id/classes/add-client-class/:classId", (req, res) => {
+router.get("/:id/classes/add-client-class/:classId", restricted, (req, res) => {
   const { id } = req.params;
   const { classId } = req.params;
-  clientClasses;
-  findClientClasses(id, classData)
-    .then((classData) => {
-      if (classData) {
-        clientClasses.addClientClass(classData, id).then((addedClass) => {
-          res.status(201).json(addedClass);
+
+  clients
+    .findById(id)
+    .then((client) => {
+      if (client) {
+        clientClasses.addClientToClass(id, classId).then((newClass) => {
+          res.status(201).json(newClass);
         });
       } else {
-        res.status(404).json({ message: "no such client" });
+        res.status(404).json({ message: "couldn't find that client" });
       }
     })
     .catch((err) => {
-      console.log(err);
-      res.status(500).json({ message: "Failed to add class" });
+      res.status(500).json({ message: "failed to add class" });
     });
 });
 
-router.get("/:id/classes/add-client-class/:classId", (req, res) => {
-  addClientClass(req, res);
-});
-
-router.get("/:id/classes", (req, res) => {
+router.get("/:id/classes", restricted, (req, res) => {
   const { id } = req.params;
   classes
     .findClientClasses(id)

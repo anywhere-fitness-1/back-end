@@ -8,7 +8,7 @@ module.exports = {
   update,
   remove,
   findClientClasses,
-  addClientClass,
+  addClientToClass,
   addInstClass,
 };
 
@@ -67,16 +67,13 @@ function findClientClasses(id, classID) {
     .where("client_classes.client_id", id);
 }
 
-function addClientClass(id, classId) {
-  return db("client_classes").insert({ client_id: id, class_id: classId });
+function addClientToClass(id, classId) {
+  return db("client_classes", "classes.name").insert({
+    client_id: id,
+    class_id: classId,
+  });
 }
 
-// function addClientClass(id, classId) {
-//   return db("client_classes")
-//     .join("clients", "clients.id", "client_classes.clientid")
-//     .join("classes", "client_classes.class_id", "classes.id")
-//     .insert({ client_id: id, class_id: classId });
-// }
 function addInstClass(classData, id) {
   return db("classes")
     .join("classes", "class_id", "instructor_id")

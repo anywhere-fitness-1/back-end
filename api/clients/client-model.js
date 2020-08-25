@@ -8,7 +8,6 @@ module.exports = {
   findBy,
   update,
   remove,
-  findClasses,
 };
 
 function find() {
@@ -45,10 +44,4 @@ function update(changes, id) {
 
 function remove(id) {
   return db("clients").where({ id }).del();
-}
-
-function findClasses(id) {
-  return db("clients")
-    .join("classes", "class_id", "client_id")
-    .where({ client_id: id });
 }

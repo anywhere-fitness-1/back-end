@@ -48,23 +48,6 @@ exports.up = function (knex) {
         .inTable("clients");
 
       tbl.primary(["class_id", "client_id"]);
-    })
-    .createTable("instructor_classes", (tbl) => {
-      tbl
-        .integer("class_id")
-        .notNullable()
-        .unsigned()
-        .references("id")
-        .inTable("classes");
-
-      tbl
-        .integer("instructor_id")
-        .notNullable()
-        .unsigned()
-        .references("id")
-        .inTable("instructor");
-
-      tbl.primary(["class_id", "instructor_id"]);
     });
 };
 
