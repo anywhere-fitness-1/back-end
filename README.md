@@ -1,6 +1,5 @@
 # back-end
 
-For now there is no authentication required.
 
 base url: https://anywhere-fitness-1.herokuapp.com/api
 
@@ -43,7 +42,7 @@ CLIENTS ROUTES
      
     /clients/:id
     takes a request body with changed values
-    returns and edited client
+    returns an edited client
     example: 
     {
     username: kevmalone,
@@ -101,7 +100,7 @@ INSTRUCTOR ROUTES
      
     /instructors/:id
     takes a request body with changed values
-    returns and edited client
+    returns an edited instructor
     example: 
     {
     username: davidbrent,
