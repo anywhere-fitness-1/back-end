@@ -4,7 +4,7 @@ For now there is no authentication required.
 
 base url: https://anywhere-fitness-1.herokuapp.com/api
 
-Clients
+CLIENTS ROUTES
   
   -GET
   
@@ -15,6 +15,7 @@ Clients
   
     /clients/:id
     returns a single client object
+  
     
   -POST
   
@@ -36,9 +37,35 @@ Clients
     password: keleven
     }
     
+ 
+  
+ -PUT
+     
+    /clients/:id
+    takes a request body with changed values
+    returns and edited client
+    example: 
+    {
+    username: kevmalone,
+    password: keleven,
+    name: kevin,
+    about: I want to lose 10lbs
+    image: https://universe.byu.edu/wp-content/uploads/2015/03/B-X8RPZIAAAa7bo.jpg
+    }
+    
+ -DELETE
+ 
+    /clients/:id
+    deletes a single client object
+    
+    
+  -GET
+  
+    /clients/classes/:id/add-client-class/:clientId
+    returns an object containing the client id and class id for the class that was reserved by the client who reserved it
   
 
-Instructors
+INSTRUCTOR ROUTES
   
   -GET
   
@@ -47,7 +74,7 @@ Instructors
     
   -GET
   
-    /clients/:id
+    /instructors/:id
     returns a single instructor object
     
   -POST 
@@ -69,6 +96,27 @@ Instructors
     password: theoriginal
     }
     
+    
+  -PUT
+     
+    /instructors/:id
+    takes a request body with changed values
+    returns and edited client
+    example: 
+    {
+    username: davidbrent,
+    password: theoriginal,
+    name: david,
+    specialties: creating hit shows and making fun of everyone
+    image: https://i2-prod.mirror.co.uk/incoming/article7426852.ece/ALTERNATES/s615b/David-Brent-in-The-Office.jpg
+    }
+    
+ -DELETE
+ 
+    /instructors/:id
+    deletes a single instructor object
+  
+    
   -POST 
   
     /instructors/create-class
@@ -76,7 +124,7 @@ Instructors
     example: 
     
     {
-     "name": "Pilates",
+        "name": "Pilates",
         "type": "Classic Strength",
         "time": "8 am",
         "date" : "08-22-20",
@@ -89,7 +137,7 @@ Instructors
     }
     
   
- Classes
+ CLASSES ROUTES
   
   -GET
   
@@ -102,4 +150,8 @@ Instructors
     returns a single class
     
     
+  -POST
+   
+    /classes/admin-create-class
+    takes a request body containing the data for a single class object, as found above in the "instructor-create-class" POST route. This is for development             purposes only so classes can be created for testing without having to be validated as an instructor
   
