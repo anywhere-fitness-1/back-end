@@ -14,7 +14,7 @@ const { isValid } = require("../../auth/auth-user.js");
 // router.get("/", restricted, (req, res) => {
 
 // adding/editing/validating clients
-router.get("/", (req, res) => {
+router.get("/", restricted, (req, res) => {
   clients
     .find()
     .then((clients) => {
@@ -25,7 +25,7 @@ router.get("/", (req, res) => {
       res.send(err);
     });
 });
-router.get("/:id", (req, res) => {
+router.get("/:id", restricted, (req, res) => {
   const { id } = req.params;
   clients
     .findById(id)
@@ -42,7 +42,7 @@ router.get("/:id", (req, res) => {
     });
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", restricted, (req, res) => {
   const { id } = req.params;
   const changes = req.body;
   clients
@@ -61,7 +61,7 @@ router.put("/:id", (req, res) => {
       res.status(500).json({ message: "Failed to update client" });
     });
 });
-router.delete("/:id", (req, res) => {
+router.delete("/:id", restricted, (req, res) => {
   const { id } = req.params;
   clients
     .remove(id)
@@ -148,7 +148,7 @@ router.post("/login", (req, res) => {
 //     });
 // });
 
-router.get("/:id/classes", (req, res) => {
+router.get("/:id/classes", restricted, (req, res) => {
   const { id } = req.params;
   classes
     .findClientClasses(id)

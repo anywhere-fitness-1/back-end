@@ -44,7 +44,7 @@ router.post("/admin-create-class", (req, res) => {
     });
 });
 
-router.get("/:id/add-client-class/:classId", (req, res) => {
+router.get("/:id/add-client-class/:classId", restricted, (req, res) => {
   const { id } = req.params;
   const { classId } = req.params;
 

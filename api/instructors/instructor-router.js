@@ -13,7 +13,7 @@ const { isValid } = require("../../auth/auth-user.js");
 // router.get("/", restricted, (req, res) => {
 
 // instructor adding
-router.get("/", (req, res) => {
+router.get("/", restricted, (req, res) => {
   instructors
     .find()
     .then((instructors) => {
@@ -24,7 +24,7 @@ router.get("/", (req, res) => {
       res.send(err);
     });
 });
-router.get("/:id", (req, res) => {
+router.get("/:id", restricted, (req, res) => {
   const { id } = req.params;
   instructors
     .findById(id)
@@ -41,7 +41,7 @@ router.get("/:id", (req, res) => {
     });
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", restricted, (req, res) => {
   const { id } = req.params;
   const changes = req.body;
 
@@ -61,7 +61,7 @@ router.put("/:id", (req, res) => {
       res.status(500).json({ message: "Failed to update instructor" });
     });
 });
-router.delete("/:id", (req, res) => {
+router.delete("/:id", restricted, (req, res) => {
   const { id } = req.params;
 
   instructors
@@ -131,7 +131,7 @@ router.post("/login", (req, res) => {
 
 // class editing by an instructor
 // add restricted below
-router.post("/create-class", (req, res) => {
+router.post("/create-class", restricted, (req, res) => {
   const classData = req.body;
   instructors
     .addInstClass(classData)
