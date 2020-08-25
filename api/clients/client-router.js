@@ -128,27 +128,27 @@ router.post("/login", (req, res) => {
 });
 // getting/adding classes to client profile
 
-router.get("/:id/classes/add-client-class/:classId", restricted, (req, res) => {
-  const { id } = req.params;
-  const { classId } = req.params;
+// router.get("/:id/classes/add-client-class/:classId", (req, res) => {
+//   const { id } = req.params;
+//   const { classId } = req.params;
 
-  clients
-    .findById(id)
-    .then((client) => {
-      if (client) {
-        clientClasses.addClientToClass(id, classId).then((newClass) => {
-          res.status(201).json(newClass);
-        });
-      } else {
-        res.status(404).json({ message: "couldn't find that client" });
-      }
-    })
-    .catch((err) => {
-      res.status(500).json({ message: "failed to add class" });
-    });
-});
+//   clients
+//     .findById(id)
+//     .then((client) => {
+//       if (client) {
+//         clientClasses.addClientToClass(id, classId).then((newClass) => {
+//           res.status(201).json(newClass);
+//         });
+//       } else {
+//         res.status(404).json({ message: "couldn't find that client" });
+//       }
+//     })
+//     .catch((err) => {
+//       res.status(500).json({ message: "failed to add class" });
+//     });
+// });
 
-router.get("/:id/classes", restricted, (req, res) => {
+router.get("/:id/classes", (req, res) => {
   const { id } = req.params;
   classes
     .findClientClasses(id)
@@ -164,6 +164,30 @@ router.get("/:id/classes", restricted, (req, res) => {
       res.status(500).json({ message: "Don't be an idiot" });
     });
 });
+
+router.get(
+  "/classes/:id/add-client-class/:clientId",
+  restricted,
+  (req, res) => {
+    const { id } = req.params;
+    const { clientId } = req.params;
+
+    classes
+      .findById(id)
+      .then((classData) => {
+        if (classData) {
+          clientClasses.addClientToClass(id, clientId).then((addedClass) => {
+            res.status(201).json(addedClass);
+          });
+        } else {
+          res.status(404).json({ message: "couldn't find that class" });
+        }
+      })
+      .catch((err) => {
+        res.status(500).json({ message: "failed to add class" });
+      });
+  }
+);
 
 function generateToken(client) {
   const payload = {

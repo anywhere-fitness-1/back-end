@@ -1,6 +1,8 @@
 const router = require("express").Router();
 
 const classes = require("../classes/class-model.js");
+const clients = require("../clients/client-model.js");
+const clientClasses = require("../classes/class-model.js");
 
 router.get("/", (req, res) => {
   classes
@@ -41,4 +43,26 @@ router.post("/admin-create-class", (req, res) => {
       res.status(500).json({ message: error.message });
     });
 });
+
+router.get("/:id/add-client-class/:classId", (req, res) => {
+  const { id } = req.params;
+  const { classId } = req.params;
+
+  clients
+    .findById(id)
+    .then((client) => {
+      if (client) {
+        clientClasses.addClientToClass(id, classId).then((newClass) => {
+          res.status(201).json(newClass);
+        });
+      } else {
+        res.status(404).json({ message: "couldn't find that client" });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: "failed to add class" });
+    });
+});
+
 module.exports = router;
