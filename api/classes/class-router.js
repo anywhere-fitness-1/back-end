@@ -3,6 +3,7 @@ const router = require("express").Router();
 const classes = require("../classes/class-model.js");
 const clients = require("../clients/client-model.js");
 const clientClasses = require("../classes/class-model.js");
+const restricted = require("../../auth/restricted-middleware.js");
 
 router.get("/", (req, res) => {
   classes
