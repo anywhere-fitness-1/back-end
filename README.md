@@ -26,6 +26,7 @@ Clients
     password: keleven,
     name: kevin,
     about: I want to lose weight
+    image: https://universe.byu.edu/wp-content/uploads/2015/03/B-X8RPZIAAAa7bo.jpg
     }
     
     /clients/login 
@@ -59,6 +60,7 @@ Instructors
     password: theoriginal,
     name: david,
     specialties: creating hit shows
+    image: https://i2-prod.mirror.co.uk/incoming/article7426852.ece/ALTERNATES/s615b/David-Brent-in-The-Office.jpg
     }
     /instructors/login
     the request body takes a username and a password property
