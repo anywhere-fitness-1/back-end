@@ -131,7 +131,7 @@ router.post("/login", (req, res) => {
 
 // class editing by an instructor
 // add restricted below
-router.post("/create-class", restricted, (req, res) => {
+router.post("/create-class", (req, res) => {
   const classData = req.body;
   instructors
     .addInstClass(classData)

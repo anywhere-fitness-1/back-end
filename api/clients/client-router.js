@@ -14,7 +14,7 @@ const { isValid } = require("../../auth/auth-user.js");
 // router.get("/", restricted, (req, res) => {
 
 // adding/editing/validating clients
-router.get("/", restricted, (req, res) => {
+router.get("/", (req, res) => {
   clients
     .find()
     .then((clients) => {
@@ -25,7 +25,7 @@ router.get("/", restricted, (req, res) => {
       res.send(err);
     });
 });
-router.get("/:id", restricted, (req, res) => {
+router.get("/:id", (req, res) => {
   const { id } = req.params;
   clients
     .findById(id)
@@ -42,7 +42,7 @@ router.get("/:id", restricted, (req, res) => {
     });
 });
 
-router.put("/:id", restricted, (req, res) => {
+router.put("/:id", (req, res) => {
   const { id } = req.params;
   const changes = req.body;
   clients
