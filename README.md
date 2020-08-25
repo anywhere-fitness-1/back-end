@@ -67,6 +67,25 @@ Instructors
     password: theoriginal
     }
     
+  -POST 
+  
+    /instructors/create-class
+    takes a request object of class data
+    example: 
+    
+    {
+     "name": "Pilates",
+        "type": "Classic Strength",
+        "time": "8 am",
+        "date" : "08-22-20",
+        "duration": "1 hr",
+        "intensity": "hard",
+        "location": "Austin, TX",
+        "attendees": 9,
+        "maxClassSize": 16,
+        "instructor_id": 1
+    }
+    
   
  Classes
   
