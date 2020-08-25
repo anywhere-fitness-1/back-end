@@ -6,6 +6,7 @@ exports.up = function (knex) {
       tbl.text("password").notNullable();
       tbl.text("name");
       tbl.text("about");
+      tbl.varbinary("image");
     })
     .createTable("instructors", (tbl) => {
       tbl.increments();
@@ -13,6 +14,7 @@ exports.up = function (knex) {
       tbl.text("password").notNullable();
       tbl.text("name");
       tbl.text("specialties");
+      tbl.varbinary("image");
     })
     .createTable("classes", (tbl) => {
       tbl.increments();
