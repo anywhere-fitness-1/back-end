@@ -142,11 +142,13 @@ INSTRUCTOR ROUTES
   
     /classes
     returns an array of classes 
+    DOES NOT REQUIRE AUTHENTICATION
     
   -GET
   
     /classes/:id
     returns a single class
+    DOES NOT REQUIRE AUTHENTICATION
     
     
   -POST
