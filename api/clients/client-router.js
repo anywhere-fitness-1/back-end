@@ -183,7 +183,7 @@ router.get(
       .then((classData) => {
         if (classData) {
           clientClasses.addClientToClass(id, clientId).then((addedClass) => {
-            res.status(201).json(addedClass);
+            res.status(201).json({ addedClass, clientId });
           });
         } else {
           res.status(404).json({ message: "couldn't find that class" });
@@ -194,6 +194,34 @@ router.get(
       });
   }
 );
+
+router.get("/classes", restricted, (req, res) => {
+  classes
+    .findClasses()
+    .then((classes) => {
+      res.status(200).json(classes);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.send(err);
+    });
+});
+router.get("/classes/:id", restricted, (req, res) => {
+  const { id } = req.params;
+  classes
+    .findById(id)
+    .then((client) => {
+      if (client) {
+        res.json(client);
+      } else {
+        res.status(404).json({ message: "No client by that id" });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: "Error getting that client" });
+    });
+});
 
 function generateToken(client) {
   const payload = {

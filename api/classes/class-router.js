@@ -16,6 +16,7 @@ router.get("/", (req, res) => {
       res.send(err);
     });
 });
+
 router.get("/:id", (req, res) => {
   const { id } = req.params;
   classes
@@ -66,4 +67,17 @@ router.get("/:id/add-client-class/:classId", restricted, (req, res) => {
     });
 });
 
+router.post("/:id", (req, res) => {
+  const id = req.params;
+  const clientData = req.body;
+  clientClasses
+    .addClientToClass(id, clientData)
+    .then((addedClass) => {
+      res.status(201).json(addedClass);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json({ message: error.message });
+    });
+});
 module.exports = router;
