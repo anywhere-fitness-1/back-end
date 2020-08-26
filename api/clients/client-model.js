@@ -21,7 +21,9 @@ function findById(id) {
 }
 
 function findBy(filter) {
-  return db("clients").select("username", "password").where(filter);
+  return db("clients")
+    .select("id", "username", "password", "name", "about")
+    .where(filter);
 }
 
 function add(client) {

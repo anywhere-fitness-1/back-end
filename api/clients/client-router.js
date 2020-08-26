@@ -33,12 +33,12 @@ router.get("/:id", restricted, (req, res) => {
       if (client) {
         res.json(client);
       } else {
-        res.status(404).json({ message: "ain't got no client by that id" });
+        res.status(404).json({ message: "No client by that id" });
       }
     })
     .catch((err) => {
       console.log(err);
-      res.status(500).json({ message: "I declare bankruptcy" });
+      res.status(500).json({ message: "Error getting that client" });
     });
 });
 
@@ -53,12 +53,12 @@ router.put("/:id", restricted, (req, res) => {
           res.json(updatedClient);
         });
       } else {
-        res.status(404).json({ message: "no such client" });
+        res.status(404).json({ message: "No client by that id" });
       }
     })
     .catch((err) => {
       console.log(err);
-      res.status(500).json({ message: "Failed to update client" });
+      res.status(500).json({ message: "Error updating the client" });
     });
 });
 router.delete("/:id", restricted, (req, res) => {
@@ -74,7 +74,7 @@ router.delete("/:id", restricted, (req, res) => {
     })
     .catch((err) => {
       console.log(err);
-      res.status(500).json({ message: "Couldn't fire Creed" });
+      res.status(500).json({ message: "Error deleting the client" });
     });
 });
 
@@ -110,6 +110,10 @@ router.post("/login", (req, res) => {
           const token = generateToken(client);
           res.status(200).json({
             message: `Welcome to Thunderdome, ${client.username}`,
+            id: `${client.id}`,
+            username: `${client.username}`,
+            name: `${client.name}`,
+            about: `${client.about}`,
             token,
           });
         } else {
@@ -156,12 +160,14 @@ router.get("/:id/classes", restricted, (req, res) => {
       if (classData) {
         res.json(classData);
       } else {
-        res.status(404).json({ message: "Not classy" });
+        res
+          .status(404)
+          .json({ message: "No class for that client based on the id" });
       }
     })
     .catch((err) => {
       console.log(err);
-      res.status(500).json({ message: "Don't be an idiot" });
+      res.status(500).json({ message: "Error getting the client's classes" });
     });
 });
 

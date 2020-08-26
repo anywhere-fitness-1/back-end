@@ -22,7 +22,9 @@ function findById(id) {
 }
 
 function findBy(filter) {
-  return db("instructors").select("username", "password").where(filter);
+  return db("instructors")
+    .select("id", "username", "password", "name", "specialties")
+    .where(filter);
 }
 
 function add(instructor) {

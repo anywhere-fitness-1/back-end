@@ -32,7 +32,7 @@ router.get("/:id", restricted, (req, res) => {
       if (instructor) {
         res.json(instructor);
       } else {
-        res.status(404).json({ message: "ain't got no instructor by that id" });
+        res.status(404).json({ message: "No such instructor" });
       }
     })
     .catch((err) => {
@@ -53,7 +53,7 @@ router.put("/:id", restricted, (req, res) => {
           res.json(updatedInstructor);
         });
       } else {
-        res.status(404).json({ message: "no such instructor" });
+        res.status(404).json({ message: "No such instructor" });
       }
     })
     .catch((err) => {
@@ -75,7 +75,7 @@ router.delete("/:id", restricted, (req, res) => {
     })
     .catch((err) => {
       console.log(err);
-      res.status(500).json({ message: "Couldn't fire Ryan" });
+      res.status(500).json({ message: "Error deleting the instructor" });
     });
 });
 router.post("/register", (req, res) => {
@@ -96,8 +96,7 @@ router.post("/register", (req, res) => {
   } else {
     console.log(error);
     res.status(400).json({
-      message:
-        "please provide username and password and the password shoud be alphanumeric",
+      message: "please provide username and password",
     });
   }
 });
@@ -110,7 +109,11 @@ router.post("/login", (req, res) => {
         if (instructor && bcryptjs.compareSync(password, instructor.password)) {
           const token = generateToken(instructor);
           res.status(200).json({
-            message: `Welcome to Thunderdome, ${instructor.username}`,
+            message: `Welcome to Thunderdome, ${instructor.name}`,
+            id: `${instructor.id}`,
+            username: `${instructor.username}`,
+            name: `${instructor.name}`,
+            specialties: `${instructor.specialties}`,
             token,
           });
         } else {
@@ -123,8 +126,7 @@ router.post("/login", (req, res) => {
       });
   } else {
     res.status(400).json({
-      message:
-        "please provide username and password and the password shoud be alphanumeric",
+      message: "please provide username and password",
     });
   }
 });
@@ -151,12 +153,12 @@ router.get("/:id/classes", (req, res) => {
       if (classData) {
         res.json(classData);
       } else {
-        res.status(404).json({ message: "Not classy" });
+        res.status(404).json({ message: "Could not find that class" });
       }
     })
     .catch((err) => {
       console.log(err);
-      res.status(500).json({ message: "Don't be an idiot" });
+      res.status(500).json({ message: "Error getting that class" });
     });
 });
 router.put("/classes/:id", restricted, (req, res) => {
@@ -171,12 +173,12 @@ router.put("/classes/:id", restricted, (req, res) => {
           res.json(updatedClass);
         });
       } else {
-        res.status(404).json({ message: "no such class" });
+        res.status(404).json({ message: "Could not find that class" });
       }
     })
     .catch((err) => {
       console.log(err);
-      res.status(500).json({ message: "Failed to update class" });
+      res.status(500).json({ message: "Error updating that class" });
     });
 });
 
