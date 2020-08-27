@@ -33,12 +33,11 @@ module.exports = {
       min: 2,
       max: 10,
     },
-    useNullAsDefault: true,
     migrations: {
-      directory: __dirname + "/data/migrations",
+      directory: "./data/migrations",
     },
     seeds: {
-      directory: __dirname + "/data/seeds",
+      directory: "./data/seeds",
     },
   },
 };
