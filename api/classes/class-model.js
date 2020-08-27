@@ -9,7 +9,7 @@ module.exports = {
   remove,
   findClientClasses,
   addClientToClass,
-  addInstClass,
+  // addInstClass,
   findClasses,
 };
 
@@ -82,12 +82,12 @@ function addClientToClass(id, clientData) {
   });
 }
 
-function addInstClass(classData, id) {
-  return db("classes")
-    .join("classes", "class_id", "instructor_id")
-    .insert(classData)
-    .where({ class_id: id });
-}
+// function addInstClass(classData, id) {
+//   return db("classes")
+//     .join("classes", "class_id", "instructor_id")
+//     .insert(classData)
+//     .where({ class_id: id });
+// }
 
 function findClasses() {
   return db("classes")
