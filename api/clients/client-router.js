@@ -132,25 +132,25 @@ router.post("/login", (req, res) => {
 });
 // getting/adding classes to client profile
 
-// router.get("/:id/classes/add-client-class/:classId", (req, res) => {
-//   const { id } = req.params;
-//   const { classId } = req.params;
+router.get("/:id/classes/add-client-class/:classId", (req, res) => {
+  const { id } = req.params;
+  const { classId } = req.params;
 
-//   clients
-//     .findById(id)
-//     .then((client) => {
-//       if (client) {
-//         clientClasses.addClientToClass(id, classId).then((newClass) => {
-//           res.status(201).json(newClass);
-//         });
-//       } else {
-//         res.status(404).json({ message: "couldn't find that client" });
-//       }
-//     })
-//     .catch((err) => {
-//       res.status(500).json({ message: "failed to add class" });
-//     });
-// });
+  clients
+    .findById(id)
+    .then((client) => {
+      if (client) {
+        clientClasses.addClientToClass(id, classId).then((newClass) => {
+          res.status(201).json(newClass);
+        });
+      } else {
+        res.status(404).json({ message: "couldn't find that client" });
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({ message: "failed to add class" });
+    });
+});
 
 router.get("/:id/classes", restricted, (req, res) => {
   const { id } = req.params;
@@ -171,30 +171,33 @@ router.get("/:id/classes", restricted, (req, res) => {
     });
 });
 
-router.get(
-  "/classes/:id/add-client-class/:clientId",
-  restricted,
-  (req, res) => {
-    const { id } = req.params;
-    const { clientId } = req.params;
+// Endpoint below is not being used. That function starts the endpoint at the class id and then move outward to clientId
 
-    classes
-      .findById(id)
-      .then((classData) => {
-        if (classData) {
-          clientClasses.addClientToClass(id, clientId).then((addedClass) => {
-            res.status(201).json({ addedClass, clientId });
-          });
-        } else {
-          res.status(404).json({ message: "couldn't find that class" });
-        }
-      })
-      .catch((err) => {
-        res.status(500).json({ message: "failed to add class" });
-      });
-  }
-);
+// router.get(
+//   "/:id/classes/:classId/add-client-class/",
+//   restricted,
+//   (req, res) => {
+//     const { id } = req.params;
+//     const { classId } = req.params;
 
+//     classes
+//       .findById(classId)
+//       .then((classData) => {
+//         if (classData) {
+//           clientClasses.addClientToClass(id, classId).then((addedClass) => {
+//             res.status(201).json({ addedClass, classId });
+//           });
+//         } else {
+//           res.status(404).json({ message: "couldn't find that class" });
+//         }
+//       })
+//       .catch((err) => {
+//         res.status(500).json({ message: "failed to add class" });
+//       });
+//   }
+// );
+
+// This endpoint isn't working. I'd like it to be able to return all the classes but be buried in the client router
 router.get("/classes", restricted, (req, res) => {
   classes
     .findClasses()

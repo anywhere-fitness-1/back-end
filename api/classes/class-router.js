@@ -46,26 +46,26 @@ router.post("/admin-create-class", (req, res) => {
     });
 });
 
-router.get("/:id/add-client-class/:classId", restricted, (req, res) => {
-  const { id } = req.params;
-  const { classId } = req.params;
+// router.get("/:id/add-client-class/:classId", restricted, (req, res) => {
+//   const { id } = req.params;
+//   const { classId } = req.params;
 
-  clients
-    .findById(id)
-    .then((client) => {
-      if (client) {
-        clientClasses.addClientToClass(id, classId).then((newClass) => {
-          res.status(201).json(newClass);
-        });
-      } else {
-        res.status(404).json({ message: "couldn't find that client" });
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({ message: "failed to add class" });
-    });
-});
+//   clients
+//     .findById(id)
+//     .then((client) => {
+//       if (client) {
+//         clientClasses.addClientToClass(id, classId).then((newClass) => {
+//           res.status(201).json(newClass);
+//         });
+//       } else {
+//         res.status(404).json({ message: "couldn't find that client" });
+//       }
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//       res.status(500).json({ message: "failed to add class" });
+//     });
+// });
 
 router.post("/:id", (req, res) => {
   const id = req.params;
