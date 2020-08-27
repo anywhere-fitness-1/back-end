@@ -6,6 +6,7 @@ exports.up = function (knex) {
       tbl.text("password").notNullable();
       tbl.text("name");
       tbl.text("about");
+      tbl.varbinary("image");
     })
     .createTable("instructors", (tbl) => {
       tbl.increments();
@@ -13,12 +14,14 @@ exports.up = function (knex) {
       tbl.text("password").notNullable();
       tbl.text("name");
       tbl.text("specialties");
+      tbl.varbinary("image");
     })
     .createTable("classes", (tbl) => {
       tbl.increments();
       tbl.text("name").notNullable();
       tbl.text("type").notNullable();
       tbl.text("time").notNullable();
+      tbl.text("date").notNullable().unsigned();
       tbl.text("duration").notNullable().unsigned();
       tbl.text("intensity").notNullable();
       tbl.text("location").notNullable();
@@ -29,9 +32,7 @@ exports.up = function (knex) {
         .unsigned()
         .notNullable()
         .references("id")
-        .inTable("instructors")
-        .onUpdate("CASCADE")
-        .onDelete("CASCADE");
+        .inTable("instructors");
     })
     .createTable("client_classes", (tbl) => {
       tbl
@@ -39,45 +40,24 @@ exports.up = function (knex) {
         .notNullable()
         .unsigned()
         .references("id")
-        .inTable("classes")
-        .onUpdate("CASCADE")
-        .onDelete("CASCADE");
+        .inTable("classes");
+
       tbl
         .integer("client_id")
         .notNullable()
         .unsigned()
         .references("id")
-        .inTable("clients")
-        .onUpdate("CASCADE")
-        .onDelete("CASCADE");
+        .inTable("clients");
+
       tbl.primary(["class_id", "client_id"]);
-    })
-    .createTable("instructor_classes", (tbl) => {
-      tbl
-        .integer("class_id")
-        .notNullable()
-        .unsigned()
-        .references("id")
-        .inTable("classes")
-        .onUpdate("CASCADE")
-        .onDelete("CASCADE");
-      tbl
-        .integer("instructor_id")
-        .notNullable()
-        .unsigned()
-        .references("id")
-        .inTable("instructor")
-        .onUpdate("CASCADE")
-        .onDelete("CASCADE");
-      tbl.primary(["class_id", "instructor_id"]);
     });
 };
 
 exports.down = function (knex) {
   return knex.schema
-    .dropTableIfExist("instructor_classes")
-    .dropTableIfExist("client_classes")
-    .dropTableIfExist("classes")
-    .dropTableIfExist("instructors")
-    .dropTableIfExist("clients");
+    .dropTableIfExists("instructor_classes")
+    .dropTableIfExists("client_classes")
+    .dropTableIfExists("classes")
+    .dropTableIfExists("instructors")
+    .dropTableIfExists("clients");
 };

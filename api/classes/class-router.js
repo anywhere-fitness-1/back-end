@@ -1,6 +1,9 @@
 const router = require("express").Router();
 
 const classes = require("../classes/class-model.js");
+const clients = require("../clients/client-model.js");
+const clientClasses = require("../classes/class-model.js");
+const restricted = require("../../auth/restricted-middleware.js");
 
 router.get("/", (req, res) => {
   classes
@@ -13,6 +16,7 @@ router.get("/", (req, res) => {
       res.send(err);
     });
 });
+
 router.get("/:id", (req, res) => {
   const { id } = req.params;
   classes
@@ -29,5 +33,51 @@ router.get("/:id", (req, res) => {
       res.status(500).json({ message: "Don't be an idiot" });
     });
 });
+router.post("/admin-create-class", (req, res) => {
+  const classData = req.body;
+  classes
+    .addClass(classData)
+    .then((addedClass) => {
+      res.status(201).json(addedClass);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json({ message: error.message });
+    });
+});
 
+// router.get("/:id/add-client-class/:classId", restricted, (req, res) => {
+//   const { id } = req.params;
+//   const { classId } = req.params;
+
+//   clients
+//     .findById(id)
+//     .then((client) => {
+//       if (client) {
+//         clientClasses.addClientToClass(id, classId).then((newClass) => {
+//           res.status(201).json(newClass);
+//         });
+//       } else {
+//         res.status(404).json({ message: "couldn't find that client" });
+//       }
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//       res.status(500).json({ message: "failed to add class" });
+//     });
+// });
+
+router.post("/:id", (req, res) => {
+  const id = req.params;
+  const clientData = req.body;
+  clientClasses
+    .addClientToClass(id, clientData)
+    .then((addedClass) => {
+      res.status(201).json(addedClass);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json({ message: error.message });
+    });
+});
 module.exports = router;

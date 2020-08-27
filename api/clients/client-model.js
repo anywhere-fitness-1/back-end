@@ -1,4 +1,5 @@
 const db = require("../../data/dbConfig.js");
+const classes = require("../classes/class-model.js");
 
 module.exports = {
   add,
@@ -7,6 +8,7 @@ module.exports = {
   findBy,
   update,
   remove,
+  findClasses,
 };
 
 function find() {
@@ -20,7 +22,9 @@ function findById(id) {
 }
 
 function findBy(filter) {
-  return db("clients").select("username", "password").where(filter);
+  return db("clients")
+    .select("id", "username", "password", "name", "about")
+    .where(filter);
 }
 
 function add(client) {
@@ -43,4 +47,22 @@ function update(changes, id) {
 
 function remove(id) {
   return db("clients").where({ id }).del();
+}
+
+function findClasses() {
+  return db("classes")
+    .select(
+      "id",
+      "name",
+      "type",
+      "time",
+      "date",
+      "duration",
+      "intensity",
+      "location",
+      "attendees",
+      "maxClassSize",
+      "instructor_id"
+    )
+    .orderBy("id");
 }

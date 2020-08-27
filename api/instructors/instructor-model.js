@@ -8,6 +8,7 @@ module.exports = {
   findBy,
   update,
   remove,
+  addInstClass,
 };
 
 function find() {
@@ -21,7 +22,9 @@ function findById(id) {
 }
 
 function findBy(filter) {
-  return db("instructors").select("username", "password").where(filter);
+  return db("instructors")
+    .select("id", "username", "password", "name", "specialties")
+    .where(filter);
 }
 
 function add(instructor) {
@@ -44,4 +47,11 @@ function update(changes, id) {
 
 function remove(id) {
   return db("instructors").where({ id }).del();
+}
+
+function addInstClass(classData, id) {
+  return db("classes")
+    .join("classes", "class_id", "instructor_id")
+    .insert(classData)
+    .where({ class_id: id });
 }

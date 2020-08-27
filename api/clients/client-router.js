@@ -2,6 +2,8 @@ const router = require("express").Router();
 
 const clients = require("../clients/client-model.js");
 const restricted = require("../../auth/restricted-middleware.js");
+const classes = require("../classes/class-model.js");
+const clientClasses = require("../classes/class-model.js");
 
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -12,7 +14,7 @@ const { isValid } = require("../../auth/auth-user.js");
 // router.get("/", restricted, (req, res) => {
 
 // adding/editing/validating clients
-router.get("/", (req, res) => {
+router.get("/", restricted, (req, res) => {
   clients
     .find()
     .then((clients) => {
@@ -23,7 +25,7 @@ router.get("/", (req, res) => {
       res.send(err);
     });
 });
-router.get("/:id", (req, res) => {
+router.get("/:id", restricted, (req, res) => {
   const { id } = req.params;
   clients
     .findById(id)
@@ -31,16 +33,16 @@ router.get("/:id", (req, res) => {
       if (client) {
         res.json(client);
       } else {
-        res.status(404).json({ message: "ain't got no client by that id" });
+        res.status(404).json({ message: "No client by that id" });
       }
     })
     .catch((err) => {
       console.log(err);
-      res.status(500).json({ message: "I declare bankruptcy" });
+      res.status(500).json({ message: "Error getting that client" });
     });
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", restricted, (req, res) => {
   const { id } = req.params;
   const changes = req.body;
   clients
@@ -51,15 +53,15 @@ router.put("/:id", (req, res) => {
           res.json(updatedClient);
         });
       } else {
-        res.status(404).json({ message: "no such client" });
+        res.status(404).json({ message: "No client by that id" });
       }
     })
     .catch((err) => {
       console.log(err);
-      res.status(500).json({ message: "Failed to update client" });
+      res.status(500).json({ message: "Error updating the client" });
     });
 });
-router.delete("/:id", (req, res) => {
+router.delete("/:id", restricted, (req, res) => {
   const { id } = req.params;
   clients
     .remove(id)
@@ -72,7 +74,7 @@ router.delete("/:id", (req, res) => {
     })
     .catch((err) => {
       console.log(err);
-      res.status(500).json({ message: "Couldn't fire Creed" });
+      res.status(500).json({ message: "Error deleting the client" });
     });
 });
 
@@ -94,8 +96,7 @@ router.post("/register", (req, res) => {
   } else {
     console.log(error);
     res.status(400).json({
-      message:
-        "please provide username and password and the password shoud be alphanumeric",
+      message: "please provide username and password",
     });
   }
 });
@@ -109,6 +110,10 @@ router.post("/login", (req, res) => {
           const token = generateToken(client);
           res.status(200).json({
             message: `Welcome to Thunderdome, ${client.username}`,
+            id: `${client.id}`,
+            username: `${client.username}`,
+            name: `${client.name}`,
+            about: `${client.about}`,
             token,
           });
         } else {
@@ -121,10 +126,104 @@ router.post("/login", (req, res) => {
       });
   } else {
     res.status(400).json({
-      message:
-        "please provide username and password and the password shoud be alphanumeric",
+      message: "please provide username and password",
     });
   }
+});
+// getting/adding classes to client profile
+
+router.get("/:id/classes/add-client-class/:classId", (req, res) => {
+  const { id } = req.params;
+  const { classId } = req.params;
+
+  clients
+    .findById(id)
+    .then((client) => {
+      if (client) {
+        clientClasses.addClientToClass(id, classId).then((newClass) => {
+          res.status(201).json(newClass);
+        });
+      } else {
+        res.status(404).json({ message: "couldn't find that client" });
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({ message: "failed to add class" });
+    });
+});
+
+router.get("/:id/classes", restricted, (req, res) => {
+  const { id } = req.params;
+  classes
+    .findClientClasses(id)
+    .then((classData) => {
+      if (classData) {
+        res.json(classData);
+      } else {
+        res
+          .status(404)
+          .json({ message: "No class for that client based on the id" });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: "Error getting the client's classes" });
+    });
+});
+
+// Endpoint below is not being used. That function starts the endpoint at the class id and then move outward to clientId
+
+// router.get(
+//   "/:id/classes/:classId/add-client-class/",
+//   restricted,
+//   (req, res) => {
+//     const { id } = req.params;
+//     const { classId } = req.params;
+
+//     classes
+//       .findById(classId)
+//       .then((classData) => {
+//         if (classData) {
+//           clientClasses.addClientToClass(id, classId).then((addedClass) => {
+//             res.status(201).json({ addedClass, classId });
+//           });
+//         } else {
+//           res.status(404).json({ message: "couldn't find that class" });
+//         }
+//       })
+//       .catch((err) => {
+//         res.status(500).json({ message: "failed to add class" });
+//       });
+//   }
+// );
+
+// This endpoint isn't working. I'd like it to be able to return all the classes but be buried in the client router
+router.get("/classes", restricted, (req, res) => {
+  classes
+    .findClasses()
+    .then((classes) => {
+      res.status(200).json(classes);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.send(err);
+    });
+});
+router.get("/classes/:id", restricted, (req, res) => {
+  const { id } = req.params;
+  classes
+    .findById(id)
+    .then((client) => {
+      if (client) {
+        res.json(client);
+      } else {
+        res.status(404).json({ message: "No client by that id" });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: "Error getting that client" });
+    });
 });
 
 function generateToken(client) {

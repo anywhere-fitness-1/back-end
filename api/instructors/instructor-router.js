@@ -7,12 +7,13 @@ const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const secrets = require("../../data/secrets.js");
 const { isValid } = require("../../auth/auth-user.js");
+
 // add "restricted" parameter to routes where needed
-const authenticate = require("../../auth/restricted-middleware.js");
+
 // router.get("/", restricted, (req, res) => {
 
 // instructor adding
-router.get("/", (req, res) => {
+router.get("/", restricted, (req, res) => {
   instructors
     .find()
     .then((instructors) => {
@@ -23,7 +24,7 @@ router.get("/", (req, res) => {
       res.send(err);
     });
 });
-router.get("/:id", (req, res) => {
+router.get("/:id", restricted, (req, res) => {
   const { id } = req.params;
   instructors
     .findById(id)
@@ -31,7 +32,7 @@ router.get("/:id", (req, res) => {
       if (instructor) {
         res.json(instructor);
       } else {
-        res.status(404).json({ message: "ain't got no instructor by that id" });
+        res.status(404).json({ message: "No such instructor" });
       }
     })
     .catch((err) => {
@@ -40,7 +41,7 @@ router.get("/:id", (req, res) => {
     });
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", restricted, (req, res) => {
   const { id } = req.params;
   const changes = req.body;
 
@@ -52,7 +53,7 @@ router.put("/:id", (req, res) => {
           res.json(updatedInstructor);
         });
       } else {
-        res.status(404).json({ message: "no such instructor" });
+        res.status(404).json({ message: "No such instructor" });
       }
     })
     .catch((err) => {
@@ -60,7 +61,7 @@ router.put("/:id", (req, res) => {
       res.status(500).json({ message: "Failed to update instructor" });
     });
 });
-router.delete("/:id", (req, res) => {
+router.delete("/:id", restricted, (req, res) => {
   const { id } = req.params;
 
   instructors
@@ -74,7 +75,7 @@ router.delete("/:id", (req, res) => {
     })
     .catch((err) => {
       console.log(err);
-      res.status(500).json({ message: "Couldn't fire Ryan" });
+      res.status(500).json({ message: "Error deleting the instructor" });
     });
 });
 router.post("/register", (req, res) => {
@@ -95,8 +96,7 @@ router.post("/register", (req, res) => {
   } else {
     console.log(error);
     res.status(400).json({
-      message:
-        "please provide username and password and the password shoud be alphanumeric",
+      message: "please provide username and password",
     });
   }
 });
@@ -109,7 +109,11 @@ router.post("/login", (req, res) => {
         if (instructor && bcryptjs.compareSync(password, instructor.password)) {
           const token = generateToken(instructor);
           res.status(200).json({
-            message: `Welcome to Thunderdome, ${instructor.username}`,
+            message: `Welcome to Thunderdome, ${instructor.name}`,
+            id: `${instructor.id}`,
+            username: `${instructor.username}`,
+            name: `${instructor.name}`,
+            specialties: `${instructor.specialties}`,
             token,
           });
         } else {
@@ -122,18 +126,17 @@ router.post("/login", (req, res) => {
       });
   } else {
     res.status(400).json({
-      message:
-        "please provide username and password and the password shoud be alphanumeric",
+      message: "please provide username and password",
     });
   }
 });
 
 // class editing by an instructor
-// add authenticate below
-router.post("/create-class", (req, res) => {
+// add restricted below
+router.post("/create-class", restricted, (req, res) => {
   const classData = req.body;
-  classes
-    .addClass(classData)
+  instructors
+    .addInstClass(classData)
     .then((addedClass) => {
       res.status(201).json(addedClass);
     })
@@ -142,7 +145,7 @@ router.post("/create-class", (req, res) => {
       res.status(500).json({ message: error.message });
     });
 });
-router.get("/classes/:id", (req, res) => {
+router.get("/:id/classes", (req, res) => {
   const { id } = req.params;
   classes
     .findById(id)
@@ -150,15 +153,15 @@ router.get("/classes/:id", (req, res) => {
       if (classData) {
         res.json(classData);
       } else {
-        res.status(404).json({ message: "Not classy" });
+        res.status(404).json({ message: "Could not find that class" });
       }
     })
     .catch((err) => {
       console.log(err);
-      res.status(500).json({ message: "Don't be an idiot" });
+      res.status(500).json({ message: "Error getting that class" });
     });
 });
-router.put("/classes/:id", authenticate, (req, res) => {
+router.put("/classes/:id", restricted, (req, res) => {
   const { id } = req.params;
   const changes = req.body;
 
@@ -170,12 +173,12 @@ router.put("/classes/:id", authenticate, (req, res) => {
           res.json(updatedClass);
         });
       } else {
-        res.status(404).json({ message: "no such class" });
+        res.status(404).json({ message: "Could not find that class" });
       }
     })
     .catch((err) => {
       console.log(err);
-      res.status(500).json({ message: "Failed to update class" });
+      res.status(500).json({ message: "Error updating that class" });
     });
 });
 
