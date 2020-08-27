@@ -41,7 +41,6 @@ exports.up = function (knex) {
         .unsigned()
         .references("id")
         .inTable("classes");
-
       tbl
         .integer("client_id")
         .notNullable()

@@ -14,21 +14,7 @@ module.exports = {
 };
 
 function find() {
-  return db("classes")
-    .select(
-      "id",
-      "name",
-      "type",
-      "time",
-      "date",
-      "duration",
-      "intensity",
-      "location",
-      "attendees",
-      "maxClassSize",
-      "instructor_id"
-    )
-    .orderBy("id");
+  return db("classes");
 }
 
 function findById(id) {
